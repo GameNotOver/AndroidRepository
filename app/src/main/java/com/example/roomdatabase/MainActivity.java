@@ -2,12 +2,15 @@ package com.example.roomdatabase;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
+import com.example.roomdatabase.myAdapter.MyAdapter;
 import com.example.roomdatabase.myUtils.Word;
 import com.example.roomdatabase.myUtils.WordViewModel;
 
@@ -18,30 +21,26 @@ public class MainActivity extends AppCompatActivity {
     WordViewModel wordViewModel;
 
     Button mBtnInsert, mBtnDelete, mBtnUpdate, mBtnClear;
-    TextView mTvShow;
+    RecyclerView mRvContainer;
+    MyAdapter myAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        wordViewModel = new WordViewModel(this.getApplication());
-
         init();
+
+        mRvContainer.setLayoutManager(new LinearLayoutManager(this));
+        mRvContainer.setAdapter(myAdapter);
+
 
         wordViewModel.getAllWordLive().observe(this, new Observer<List<Word>>() {
             @Override
             public void onChanged(List<Word> words) {
-                StringBuilder text = new StringBuilder();
-                for(int i=0; i<words.size(); i++){
-                    Word word = words.get(i);
-                    text.append(word.getId()).append("：")
-                            .append(word.getEnglishWord())
-                            .append("=")
-                            .append(word.getChineseMean())
-                            .append("\n");
-                }
-                mTvShow.setText(text);
+                myAdapter.setAllWords(words);
+                myAdapter.notifyDataSetChanged();
             }
         });
 
@@ -49,11 +48,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init(){
-        mTvShow = findViewById(R.id.tv_show);
+//        mTvShow = findViewById(R.id.tv_show);
         mBtnInsert = findViewById(R.id.btn_add);
         mBtnDelete = findViewById(R.id.btn_del);
         mBtnUpdate = findViewById(R.id.btn_update);
         mBtnClear = findViewById(R.id.btn_clear);
+        mRvContainer = findViewById(R.id.rv_container);
+
+//        wordViewModel = new WordViewModel(this.getApplication());
+        wordViewModel = new ViewModelProvider(this).get(WordViewModel.class);
+        myAdapter = new MyAdapter();
     }
 
     private void setListeners(){
