@@ -14,6 +14,16 @@ public class Word {
     private String englishWord;
     @ColumnInfo(name = "chinese_meaning")
     private String chineseMean;
+    @ColumnInfo(name = "chinese_visible")
+    private boolean chineseVisible;
+
+    public boolean isChineseVisible() {
+        return chineseVisible;
+    }
+
+    public void setChineseVisible(boolean chineseVisible) {
+        this.chineseVisible = chineseVisible;
+    }
 
     public Word(String englishWord, String chineseMean) {
         this.englishWord = englishWord;

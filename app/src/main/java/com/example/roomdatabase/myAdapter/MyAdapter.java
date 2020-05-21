@@ -1,5 +1,7 @@
 package com.example.roomdatabase.myAdapter;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,11 +33,20 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
         Word word = allWords.get(position);
         holder.mTvId.setText(String.valueOf(position + 1));
         holder.mTvWord.setText(word.getEnglishWord());
         holder.mTvMean.setText(word.getChineseMean());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse("https://m.youdao.com/dict?le=eng&q=" + holder.mTvWord.getText());
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(uri);
+                holder.itemView.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -45,7 +56,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     class MyViewHolder extends RecyclerView.ViewHolder{
         TextView mTvId, mTvWord, mTvMean;
-        public MyViewHolder(@NonNull View itemView) {
+        MyViewHolder(@NonNull View itemView) {
             super(itemView);
             mTvId = itemView.findViewById(R.id.tv_id);
             mTvWord = itemView.findViewById(R.id.tv_word);
