@@ -9,19 +9,23 @@ import com.example.roomdatabase.myInterface.WordDao;
 
 import java.util.List;
 
-public class WordRepository {
+class WordRepository {
     private LiveData<List<Word>> allWordsLive;
     private WordDao wordDao;
 
-    public WordRepository(Context context){
+    WordRepository(Context context){
         WordDatabase wordDatabase = WordDatabase.getDatabase(context.getApplicationContext());
         wordDao = wordDatabase.getWordDao();
         allWordsLive = wordDao.getAllWordsLive();
     }
 
-    public LiveData<List<Word>> getAllWordsLive(){
+    LiveData<List<Word>> getAllWordsLive(){
         return allWordsLive;
     }
+    LiveData<List<Word>> findWordsWithPatten(String patten){
+        return wordDao.findWordsWithPatten("%" + patten + "%");
+    }
+
 
     void insertWords(Word... words){
         new InsertAsyncTask(wordDao).execute(words);

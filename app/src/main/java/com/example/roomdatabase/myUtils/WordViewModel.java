@@ -24,6 +24,9 @@ public class WordViewModel extends AndroidViewModel {
     public LiveData<List<Word>> getAllWordLive(){
         return wordRepository.getAllWordsLive();
     }
+    public LiveData<List<Word>> findWordsLiveWithPatten(String patten){
+        return wordRepository.findWordsWithPatten(patten);
+    }
 
     public void insertWords(Word... words){
         wordRepository.insertWords(words);
@@ -40,6 +43,7 @@ public class WordViewModel extends AndroidViewModel {
     public void clearWords(Word... words){
         wordRepository.clearWords();
     }
+
 
 
 
