@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">RoomDatabase</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="hint_input_word">请输入英文单词</string>
+    <string name="hint_input_mean">请输入中文释意</string>
+    <string name="submit">提交</string>
 </resources>

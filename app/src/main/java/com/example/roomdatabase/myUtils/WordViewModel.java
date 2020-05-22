@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.example.roomdatabase.myInterfaces.WordDao;
+import com.example.roomdatabase.myInterface.WordDao;
 
 import java.util.List;
 

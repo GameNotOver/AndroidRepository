@@ -1,4 +1,4 @@
-package com.example.roomdatabase.myInterfaces;
+package com.example.roomdatabase.myInterface;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;

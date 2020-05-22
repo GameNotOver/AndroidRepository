@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.example.roomdatabase.myInterfaces.WordDao;
+import com.example.roomdatabase.myInterface.WordDao;
 
 @Database(entities = {Word.class}, version = 3, exportSchema = false)
 public abstract class WordDatabase extends RoomDatabase {
