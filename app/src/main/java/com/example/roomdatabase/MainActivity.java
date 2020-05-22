@@ -39,8 +39,11 @@ public class MainActivity extends AppCompatActivity {
         wordViewModel.getAllWordLive().observe(this, new Observer<List<Word>>() {
             @Override
             public void onChanged(List<Word> words) {
+                int temp = myAdapter.getItemCount();
                 myAdapter.setAllWords(words);
-                myAdapter.notifyDataSetChanged();
+
+                if(temp != words.size())
+                    myAdapter.notifyDataSetChanged();
             }
         });
 
@@ -57,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
 //        wordViewModel = new WordViewModel(this.getApplication());
         wordViewModel = new ViewModelProvider(this).get(WordViewModel.class);
-        myAdapter = new MyAdapter();
+        myAdapter = new MyAdapter(wordViewModel);
     }
 
     private void setListeners(){
