@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,6 +44,7 @@ public class WordsFragment extends Fragment {
     private RecyclerView mRvWords;
     private MyAdapter myAdapter;
     private LiveData<List<Word>> filteredWords;
+    private List<Word> allWords;
 
     public WordsFragment() {
         // Required empty public constructor
@@ -86,12 +88,26 @@ public class WordsFragment extends Fragment {
             }
         });
 
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.START | ItemTouchHelper.END) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                Word wordToDelete = allWords.get(viewHolder.getAdapterPosition());
+                wordViewModel.deleteWords(wordToDelete);
+            }
+        }).attachToRecyclerView(mRvWords);
+
         filteredWords = wordViewModel.getAllWordLive();
 
         wordViewModel.getAllWordLive().observe(getViewLifecycleOwner(), new Observer<List<Word>>() {
             @Override
             public void onChanged(List<Word> words) {
                 int temp = myAdapter.getItemCount();
+                allWords = words;
 //                myAdapter.setAllWords(words);
                 if(temp != words.size()){
                     myAdapter.submitList(words);
@@ -168,6 +184,7 @@ public class WordsFragment extends Fragment {
                     @Override
                     public void onChanged(List<Word> words) {
                         int temp = myAdapter.getItemCount();
+                        allWords = words;
 //                        myAdapter.setAllWords(words);
                         if(temp != words.size()){
                             mRvWords.smoothScrollBy(0, -200);
