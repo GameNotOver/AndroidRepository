@@ -4,6 +4,8 @@ package com.example.roomdatabase.myFragments;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -27,6 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.example.roomdatabase.R;
 import com.example.roomdatabase.myAdapter.MyAdapter;
@@ -61,14 +64,31 @@ public class WordsFragment extends Fragment {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        final FloatingActionButton mAddBtn = requireActivity().findViewById(R.id.word_btn_add);
-
         super.onActivityCreated(savedInstanceState);
+        final FloatingActionButton mAddBtn = requireActivity().findViewById(R.id.word_btn_add);
         wordViewModel = new ViewModelProvider(requireActivity()).get(WordViewModel.class);
         mRvWords = requireActivity().findViewById(R.id.rv_words);
         mRvWords.setLayoutManager(new LinearLayoutManager(requireActivity()));
         myAdapter = new MyAdapter(wordViewModel);
         mRvWords.setAdapter(myAdapter);
+        
+        myAdapter.setOnClickListener(new MyAdapter.OnClickListener() {
+            @Override
+            public void onDelMenuClick(int position) {
+                Word wordToDelete = allWords.get(position);
+                Toast.makeText(requireActivity(), "pos" + position, Toast.LENGTH_SHORT).show();
+                wordViewModel.deleteWords(wordToDelete);
+            }
+
+            @Override
+            public void onContentClick(int position, Word word) {
+                Uri uri = Uri.parse("https://m.youdao.com/dict?le=eng&q=" + word.getEnglishWord());
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(uri);
+                startActivity(intent);
+            }
+        });
+
         mRvWords.setItemAnimator(new DefaultItemAnimator(){
             @Override
             public void onAnimationFinished(@NonNull RecyclerView.ViewHolder viewHolder) {
@@ -88,18 +108,19 @@ public class WordsFragment extends Fragment {
             }
         });
 
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.START | ItemTouchHelper.END) {
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                Word wordToDelete = allWords.get(viewHolder.getAdapterPosition());
-                wordViewModel.deleteWords(wordToDelete);
-            }
-        }).attachToRecyclerView(mRvWords);
+//        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.START) {
+//            @Override
+//            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+//                return false;
+//            }
+//
+//            @Override
+//            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+//                Word wordToDelete = allWords.get(viewHolder.getAdapterPosition());
+//                Toast.makeText(requireActivity(), "pos" + direction, Toast.LENGTH_SHORT).show();
+//                wordViewModel.deleteWords(wordToDelete);
+//            }
+//        }).attachToRecyclerView(mRvWords);
 
         filteredWords = wordViewModel.getAllWordLive();
 

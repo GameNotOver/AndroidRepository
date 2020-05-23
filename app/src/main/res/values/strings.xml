@@ -4,7 +4,9 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="add_words_tips">添加生词</string>
     <string name="hint_input_word">请输入英文单词</string>
     <string name="hint_input_mean">请输入中文释意</string>
     <string name="submit">提交</string>
+    <string name="delete">删除</string>
 </resources>
